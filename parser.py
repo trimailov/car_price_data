@@ -22,18 +22,27 @@ def build_link(manufacturer_id, model_id, page_nr):
 
 
 def scrape():
-    r = requests.get(build_link(43, 193, 1))
-    r.encoding = 'utf-8'
-    html = r.text
+    page = 1
+    while True:
+        r = requests.get(build_link(43, 193, page))
+        r.encoding = 'utf-8'
+        html = r.text
 
-    soup = BeautifulSoup(html, 'html.parser')
-    prices = [price.contents[0] for price in soup.select('p.fl strong')]
-    dates = [date.contents[0] for date in soup.select('span[title^=Pagaminimo]')]
+        soup = BeautifulSoup(html, 'html.parser')
+        prices = [price.contents[0] for price in soup.select('p.fl strong')]
+        dates = [date.contents[0]
+                 for date in soup.select('span[title^=Pagaminimo]')]
 
-    z = zip(dates, prices)
+        # if no data is retrieved - stop scraping
+        if not any((dates, prices)):
+            break
 
-    for i in z:
-        print(i)
+        z = zip(dates, prices)
+
+        for i in z:
+            print(i)
+
+        page += 1
 
 
 if __name__ == '__main__':
