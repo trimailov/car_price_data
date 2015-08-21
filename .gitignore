@@ -1,0 +1,5 @@
+# PYTHON
+env/*
+__pycache__/*
+
+tags
