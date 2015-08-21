@@ -5,16 +5,16 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def build_link(manufacturer_id, model_id, page):
+def build_link(manufacturer_id, model_id, page_nr):
     base_link = 'http://auto.plius.lt/skelbimai/naudoti-automobiliai'
     manufacturer = 'make_id={}'.format(manufacturer_id)
     model = 'model_id={}'.format(model_id)
-    page = 'page_nr={}'
+    page = 'page_nr={}'.format(page_nr)
 
     link = '{base_link}?{manufacturer}&{model}&{page}'.format(
         base_link=base_link,
         manufacturer=manufacturer,
-        model=model.format,
+        model=model,
         page=page,
     )
 
