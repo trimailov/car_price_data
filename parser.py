@@ -21,6 +21,21 @@ def build_link(manufacturer_id, model_id, page_nr):
     return link
 
 
+def parse_data(soup):
+    "Parses price and date data from html page"
+    auto_list = soup.select('ul.auto-list li')
+    prices = []
+    dates = []
+    for auto in auto_list:
+        if not auto.select('div.item div.price-list-promo'):
+            price = auto.select('div.price-list p.fl strong')
+            date = auto.select('div.param-list span[title^=Pagaminimo]')
+        if all((price, date)):
+            prices.append(price[0].contents[0])
+            dates.append(date[0].contents[0])
+    return prices, dates
+
+
 def scrape():
     page = 1
     while True:
@@ -29,9 +44,8 @@ def scrape():
         html = r.text
 
         soup = BeautifulSoup(html, 'html.parser')
-        prices = [price.contents[0] for price in soup.select('p.fl strong')]
-        dates = [date.contents[0]
-                 for date in soup.select('span[title^=Pagaminimo]')]
+
+        dates, prices = parse_data(soup)
 
         # if no data is retrieved - stop scraping
         if not any((dates, prices)):
