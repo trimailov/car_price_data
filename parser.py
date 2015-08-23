@@ -38,7 +38,10 @@ def parse_data(soup):
 
 def scrape():
     page = 1
+    result = []
     while True:
+        print('Parsing page {}'.format(page))
+
         r = requests.get(build_link(43, 193, page))
         r.encoding = 'utf-8'
         html = r.text
@@ -52,11 +55,10 @@ def scrape():
             break
 
         z = zip(dates, prices)
-
-        for i in z:
-            print(i)
-
+        result.extend(list(z))
         page += 1
+
+    return result
 
 
 if __name__ == '__main__':
