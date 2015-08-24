@@ -87,7 +87,7 @@ def plot(data):
     # convert dates into numbers which can be plotted
     for date in dates:
         num_dates.append(dt.datestr2num(date))
-    plt.scatter(num_dates, prices)
+    plt.plot_date(num_dates, prices)
     plt.show()
 
 
