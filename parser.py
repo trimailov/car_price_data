@@ -2,6 +2,8 @@
 import csv
 
 from bs4 import BeautifulSoup
+import matplotlib.dates as dt
+import matplotlib.pyplot as plt
 
 import requests
 
@@ -77,6 +79,16 @@ def create_csv(data):
         writer.writerow(['Date', 'Price, EUR'])
         for row in data:
             writer.writerow(row)
+
+
+def plot(data):
+    dates, prices = zip(*data)
+    num_dates = []
+    # convert dates into numbers which can be plotted
+    for date in dates:
+        num_dates.append(dt.datestr2num(date))
+    plt.scatter(num_dates, prices)
+    plt.show()
 
 
 if __name__ == '__main__':
