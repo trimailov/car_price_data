@@ -20,6 +20,15 @@ def build_link(manufacturer_id, model_id, page_nr):
 
     return link
 
+def is_euro(price):
+    "Removes euro symbol from price"
+    price = price[0].contents[0]
+    if price.endswith('€'):
+        # remove two last chars and spaces
+        return int(price[:-2].replace(' ', ''))
+    # at this moment we do not want to save non-euro prices
+    return None
+
 
 def parse_data(soup):
     "Parses price and date data from html page"
@@ -30,8 +39,8 @@ def parse_data(soup):
         if not auto.select('div.item div.price-list-promo'):
             price = auto.select('div.price-list p.fl strong')
             date = auto.select('div.param-list span[title^=Pagaminimo]')
-        if all((price, date)):
-            prices.append(price[0].contents[0])
+        if all((price, date)) and is_euro(price):
+            prices.append(is_euro(price))
             dates.append(date[0].contents[0])
     return prices, dates
 
