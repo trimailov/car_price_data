@@ -94,3 +94,4 @@ def plot(data):
 if __name__ == '__main__':
     data = scrape()
     create_csv(data)
+    plot(data)
