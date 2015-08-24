@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import csv
 
 from bs4 import BeautifulSoup
 
@@ -42,7 +43,7 @@ def parse_data(soup):
         if all((price, date)) and is_euro(price):
             prices.append(is_euro(price))
             dates.append(date[0].contents[0])
-    return prices, dates
+    return dates, prices
 
 
 def scrape():
@@ -70,5 +71,14 @@ def scrape():
     return result
 
 
+def create_csv(data):
+    with open('data.csv', 'w', newline='') as data_file:
+        writer = csv.writer(data_file)
+        writer.writerow(['Date', 'Price, EUR'])
+        for row in data:
+            writer.writerow(row)
+
+
 if __name__ == '__main__':
-    scrape()
+    data = scrape()
+    create_csv(data)
