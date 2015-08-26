@@ -23,6 +23,7 @@ def build_link(manufacturer_id, model_id, page_nr):
 
     return link
 
+
 def is_euro(price):
     "Removes euro symbol from price"
     price = price[0].contents[0]
