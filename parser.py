@@ -1,11 +1,15 @@
 #!/usr/bin/python3
 import csv
+import json
 
 from bs4 import BeautifulSoup
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
 
 import requests
+
+
+HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36"}
 
 
 def build_link(manufacturer_id, model_id, page_nr):
@@ -49,13 +53,16 @@ def parse_data(soup):
     return dates, prices
 
 
-def scrape():
+def scrape(maker_id, model_id):
     page = 1
     result = []
     while True:
-        print('Parsing page {}'.format(page))
+        print('Scraping page {}'.format(page))
 
-        r = requests.get(build_link(43, 193, page))
+        r = requests.get(build_link(maker_id, model_id, page), headers=HEADERS)
+        if r.status_code != 200:
+            continue
+
         r.encoding = 'utf-8'
         html = r.text
 
@@ -74,8 +81,11 @@ def scrape():
     return result
 
 
-def create_csv(data):
-    with open('data.csv', 'w', newline='') as data_file:
+def create_csv(data, maker_name, model_name):
+    maker_name = maker_name.replace('/', '')
+    model_name = model_name.replace('/', '')
+    filename = "data/{}_{}.csv".format(maker_name, model_name)
+    with open(filename, 'w', newline='') as data_file:
         writer = csv.writer(data_file)
         writer.writerow(['Date', 'Price, EUR'])
         for row in data:
@@ -93,6 +103,18 @@ def plot(data):
 
 
 if __name__ == '__main__':
-    data = scrape()
-    create_csv(data)
-    plot(data)
+    with open('makers.json', 'r') as makers_json:
+        makers = json.load(makers_json)
+
+    for maker in makers:
+        maker_id = maker['id']
+        maker_name = maker['maker']
+        for model in maker['models']:
+            model_id = model['id']
+            model_name = model['model']
+
+            print('Scraping data for: {} {}'.format(maker_name, model_name))
+
+            data = scrape(maker_id, model_id)
+            create_csv(data, maker_name, model_name)
+    #plot(data)
