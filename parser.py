@@ -103,7 +103,7 @@ def plot(data):
     plt.show()
 
 
-if __name__ == '__main__':
+def gather_all_data():
     with open('makers.json', 'r') as makers_json:
         makers = json.load(makers_json)
 
@@ -125,4 +125,8 @@ if __name__ == '__main__':
                 data = scrape(maker_id, model_id)
                 create_csv(data, maker_name, model_name)
                 time.sleep(1)
+
+
+if __name__ == '__main__':
+    data = scrape(maker_id, model_id)
     #plot(data)
