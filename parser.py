@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import csv
 import json
+import time
 
 from bs4 import BeautifulSoup
 import matplotlib.dates as dt
@@ -123,4 +124,5 @@ if __name__ == '__main__':
                 print('Scraping data for: {} {}'.format(maker_name, model_name))
                 data = scrape(maker_id, model_id)
                 create_csv(data, maker_name, model_name)
+                time.sleep(1)
     #plot(data)
