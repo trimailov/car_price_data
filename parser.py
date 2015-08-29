@@ -106,15 +106,21 @@ if __name__ == '__main__':
     with open('makers.json', 'r') as makers_json:
         makers = json.load(makers_json)
 
+    maker_name_start = 'Citroen'
+    model_name_start = 'DS5'
+    past_start = False
+
     for maker in makers:
         maker_id = maker['id']
         maker_name = maker['maker']
         for model in maker['models']:
+            if maker_name_start == maker_name and model_name_start == model_name:
+                past_start = True
             model_id = model['id']
             model_name = model['model']
 
-            print('Scraping data for: {} {}'.format(maker_name, model_name))
-
-            data = scrape(maker_id, model_id)
-            create_csv(data, maker_name, model_name)
+            if past_start:
+                print('Scraping data for: {} {}'.format(maker_name, model_name))
+                data = scrape(maker_id, model_id)
+                create_csv(data, maker_name, model_name)
     #plot(data)
