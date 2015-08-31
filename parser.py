@@ -85,7 +85,7 @@ def scrape(maker_id, model_id):
 def create_csv(data, maker_name, model_name):
     maker_name = maker_name.replace('/', '')
     model_name = model_name.replace('/', '')
-    filename = "data/{}_{}.csv".format(maker_name, model_name)
+    filename = "results/data/{}_{}.csv".format(maker_name, model_name)
     with open(filename, 'w', newline='') as data_file:
         writer = csv.writer(data_file)
         writer.writerow(['Date', 'Price, EUR'])
