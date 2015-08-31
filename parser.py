@@ -104,6 +104,7 @@ def plot(data):
 
 
 def gather_all_data():
+    "Scrapes price data for all makers and their models"
     with open('makers.json', 'r') as makers_json:
         makers = json.load(makers_json)
 
