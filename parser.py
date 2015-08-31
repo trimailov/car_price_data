@@ -124,7 +124,7 @@ def gather_all_data():
                 print('Scraping data for: {} {}'.format(maker_name, model_name))
                 data = scrape(maker_id, model_id)
                 create_csv(data, maker_name, model_name)
-                time.sleep(1)
+                time.sleep(3)
 
 
 if __name__ == '__main__':
