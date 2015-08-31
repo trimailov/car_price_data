@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import csv
+import datetime
 import json
 import time
 
@@ -108,8 +109,16 @@ def plot(data):
     num_dates = []
     # convert dates into numbers which can be plotted
     for date in dates:
-        num_dates.append(dt.datestr2num(date))
+        # num_dates.append(dt.datestr2num(date))
+        if len(date) > 4:
+            num_dates.append(datetime.datetime.strptime(date, '%Y-%m').date())
+        else:
+            num_dates.append(datetime.datetime.strptime(date, '%Y').date())
+
+    plt.gca().xaxis.set_major_formatter(dt.DateFormatter('%Y'))
+    plt.gca().xaxis.set_major_locator(dt.YearLocator(3))
     plt.plot_date(num_dates, prices)
+    plt.grid(True)
     plt.show()
 
 
