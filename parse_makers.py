@@ -90,9 +90,6 @@ def scrape_models():
             model_name = option.contents[0]
             if not model_id:
                 continue
-            # print("Maker: {} ({}), model: {} ({})".format(
-            #     name, id, model_name, model_id
-            # ))
             models.append({'model': model_name, 'id': model_id})
         makers.append({'maker': name, 'id': id, 'models': models})
     with open('makers.json', 'w') as makers_json:
