@@ -93,6 +93,16 @@ def create_csv(data, maker_name, model_name):
             writer.writerow(row)
 
 
+def read_csv(maker_name, model_name):
+    maker_name = maker_name.replace('/', '')
+    model_name = model_name.replace('/', '')
+    filename = "results/data/{}_{}.csv".format(maker_name, model_name)
+    with open(filename, 'r', newline='') as data_file:
+        data = [tuple(row) for row in csv.reader(data_file)]
+    # do not return csv header
+    return data[1:]
+
+
 def plot(data):
     dates, prices = zip(*data)
     num_dates = []
