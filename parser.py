@@ -150,6 +150,8 @@ def plot(data, maker, model):
     plt.xlabel('Year of manufacture')
     plt.ylabel('Price, EUR')
 
+    plt.xticks(rotation=30)
+
     plt.show()
 
 
