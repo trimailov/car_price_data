@@ -104,7 +104,7 @@ def read_csv(maker_name, model_name):
     return data[1:]
 
 
-def plot(data):
+def plot(data, maker, model):
     # every which year major tick should be placed
     YEAR_TICK = 3
 
@@ -145,6 +145,11 @@ def plot(data):
         datetime.date(year_min, 1, 1),
         datetime.date(year_max, 1, 1)
     )
+
+    plt.title('{} {}'.format(maker, model))
+    plt.xlabel('Year of manufacture')
+    plt.ylabel('Price, EUR')
+
     plt.show()
 
 
@@ -174,5 +179,9 @@ def gather_all_data():
 
 
 if __name__ == '__main__':
-    data = scrape(maker_id, model_id)
-    #plot(data)
+    # data = scrape(maker_id, model_id)
+    # plot(data)
+    maker = 'Volkswagen'
+    model = 'Passat'
+    data = read_csv(maker, model)
+    plot(data, maker, model)
