@@ -152,6 +152,8 @@ def plot(data, maker, model):
 
     plt.xticks(rotation=30)
 
+    plt.tight_layout()
+
     plt.show()
 
 
