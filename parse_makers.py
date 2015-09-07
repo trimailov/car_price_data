@@ -1,4 +1,12 @@
 # coding: utf-8
+
+# This file scrapes auto.plius.lt for car manufacturers and their models
+# with id's used in their DB backend.
+#
+# Information is saved into json file (makers.json) and later is used to
+# generate GET queries to get car data
+
+
 import json
 
 from bs4 import BeautifulSoup as BS
