@@ -4,6 +4,9 @@ import datetime
 
 import matplotlib.dates as dt
 import matplotlib.pyplot as plt
+import numpy as np
+
+from scipy.optimize import curve_fit
 
 
 def read_csv(maker_name, model_name):
@@ -14,6 +17,17 @@ def read_csv(maker_name, model_name):
         data = [tuple(row) for row in csv.reader(data_file)]
     # do not return csv header
     return data[1:]
+
+
+def exp_func(x, a, b, c):
+    return a * np.exp(b * x) + c
+
+
+def fit_plot(dates, prices):
+    number_dates = dt.date2num(dates)
+    number_prices = list(map(int, prices))
+    popt, pcov = curve_fit(exp_func, number_dates, number_prices)
+    pass
 
 
 def plot(data, maker, model):
@@ -29,6 +43,8 @@ def plot(data, maker, model):
             num_dates.append(datetime.datetime.strptime(date, '%Y-%m').date())
         else:
             num_dates.append(datetime.datetime.strptime(date, '%Y').date())
+
+    fit_plot(num_dates, prices)
 
     date_min = min(dates)
     date_max = max(dates)
