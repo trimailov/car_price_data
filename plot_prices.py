@@ -83,7 +83,8 @@ def plot(data, maker, model):
     plt.gca().xaxis.set_major_formatter(dt.DateFormatter('%Y'))
     plt.gca().xaxis.set_major_locator(dt.YearLocator(YEAR_TICK))
 
-    plt.plot_date(num_dates, prices)
+    plt.plot_date(num_dates, prices, 'g.', alpha=0.3)
+    plt.plot_date(fitted_dates, fitted_prices, 'b-', linewidth=2)
     plt.grid(True)
 
     plt.gca().set_xlim(
