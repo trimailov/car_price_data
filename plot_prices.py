@@ -23,11 +23,28 @@ def exp_func(x, a, b, c):
     return a * np.exp(b * x) + c
 
 
-def fit_plot(dates, prices):
+def fit_prices(dates, prices):
     number_dates = dt.date2num(dates)
+    # normalize dates to have smaller numbers
+    min_date = min(number_dates)
+    max_date = max(number_dates)
+    norm_number_dates = (number_dates - min_date) / max_date
+
     number_prices = list(map(int, prices))
-    popt, pcov = curve_fit(exp_func, number_dates, number_prices)
-    pass
+
+    popt, pcov = curve_fit(exp_func, norm_number_dates, number_prices)
+
+    # calculate prices, from normalized dates upon exp_func()
+    fitted_dates = np.linspace(min(norm_number_dates),
+                               max(norm_number_dates),
+                               1000)
+    fitted_prices = [exp_func(date, popt[0], popt[1], popt[2])
+                     for date in fitted_dates]
+
+    # denormlaize dates
+    denorm_number_dates = (fitted_dates * max_date) + min_date
+
+    return denorm_number_dates, fitted_prices
 
 
 def plot(data, maker, model):
@@ -44,7 +61,7 @@ def plot(data, maker, model):
         else:
             num_dates.append(datetime.datetime.strptime(date, '%Y').date())
 
-    fit_plot(num_dates, prices)
+    fitted_dates, fitted_prices = fit_prices(num_dates, prices)
 
     date_min = min(dates)
     date_max = max(dates)
