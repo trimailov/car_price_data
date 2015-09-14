@@ -26,9 +26,11 @@ def exp_func(x, a, b, c):
 def fit_prices(dates, prices):
     number_dates = dt.date2num(dates)
     # normalize dates to have smaller numbers
-    min_date = min(number_dates)
     max_date = max(number_dates)
-    norm_number_dates = (number_dates - min_date) / max_date
+    temp_number_dates = number_dates / max_date
+    min_temp_date = min(temp_number_dates)
+    norm_number_dates = temp_number_dates - min_temp_date
+    del temp_number_dates
 
     number_prices = list(map(int, prices))
 
@@ -42,7 +44,7 @@ def fit_prices(dates, prices):
                      for date in fitted_dates]
 
     # denormlaize dates
-    denorm_number_dates = (fitted_dates * max_date) + min_date
+    denorm_number_dates = (fitted_dates + min_temp_date) * max_date
 
     return denorm_number_dates, fitted_prices
 
