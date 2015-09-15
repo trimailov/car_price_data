@@ -9,6 +9,9 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
+plt.style.use('ggplot')
+
+
 def read_csv(maker_name, model_name):
     maker_name = maker_name.replace('/', '')
     model_name = model_name.replace('/', '')
