@@ -9,7 +9,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-plt.style.use('ggplot')
+plt.style.use('dark_background')
 
 
 def read_csv(maker_name, model_name):
@@ -26,7 +26,11 @@ def exp_func(x, a, b, c):
     return a * np.exp(b * x) + c
 
 
-def fit_prices(dates, prices):
+def poly_func(x, a, b, c):
+    return a * x ** 2 + b * x + c
+
+
+def fit_prices(dates, prices, fit_func):
     number_dates = dt.date2num(dates)
     # normalize dates to have smaller numbers
     max_date = max(number_dates)
@@ -37,13 +41,13 @@ def fit_prices(dates, prices):
 
     number_prices = list(map(int, prices))
 
-    popt, pcov = curve_fit(exp_func, norm_number_dates, number_prices)
+    popt, pcov = curve_fit(fit_func, norm_number_dates, number_prices)
 
     # calculate prices, from normalized dates upon exp_func()
     fitted_dates = np.linspace(min(norm_number_dates),
                                max(norm_number_dates),
                                1000)
-    fitted_prices = [exp_func(date, popt[0], popt[1], popt[2])
+    fitted_prices = [fit_func(date, popt[0], popt[1], popt[2])
                      for date in fitted_dates]
 
     # denormlaize dates
@@ -66,7 +70,8 @@ def plot(data, maker, model):
         else:
             num_dates.append(datetime.datetime.strptime(date, '%Y').date())
 
-    fitted_dates, fitted_prices = fit_prices(num_dates, prices)
+    fitted_dates, fitted_prices = fit_prices(num_dates, prices, exp_func)
+    # fitted_dates_poly, fitted_prices_poly = fit_prices(num_dates, prices, poly_func)
 
     date_min = min(dates)
     date_max = max(dates)
@@ -88,8 +93,9 @@ def plot(data, maker, model):
     plt.gca().xaxis.set_major_formatter(dt.DateFormatter('%Y'))
     plt.gca().xaxis.set_major_locator(dt.YearLocator(YEAR_TICK))
 
-    plt.plot_date(num_dates, prices, 'g.', alpha=0.3)
-    plt.plot_date(fitted_dates, fitted_prices, 'b-', linewidth=2)
+    plt.plot_date(num_dates, prices)
+    plt.plot_date(fitted_dates, fitted_prices, fmt='-', linewidth=2)
+    # plt.plot_date(fitted_dates_poly, fitted_prices_poly, fmt='-', linewidth=2)
     plt.grid(True)
 
     plt.gca().set_xlim(
