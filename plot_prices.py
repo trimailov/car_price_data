@@ -37,6 +37,18 @@ def ready_data(data):
     return number_dates, number_prices
 
 
+def ready_data_by_age(data):
+    "Readies the data to be ordered by age of a car"
+    number_dates, number_prices = ready_data(data)
+
+    delta_dates = []
+    for date in number_dates:
+        # I guess no one will use this later than 2016-01-01 so I hardcode it
+        delta_dates.append(datetime.date(2016, 1, 1) - date)
+
+    return delta_dates, number_prices
+
+
 def get_min_max_dates(dates):
     "Founds the outer limits of min and max years"
     date_min = min(dates)
