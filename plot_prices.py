@@ -22,6 +22,32 @@ def read_csv(maker_name, model_name):
     return data[1:]
 
 
+def ready_data(data):
+    dates, prices = zip(*data)
+    number_prices = list(map(int, prices))
+    number_dates = []
+    # convert dates into numbers which can be plotted
+    for date in dates:
+        # num_dates.append(dt.datestr2num(date))
+        if len(date) > 4:
+            number_dates.append(datetime.datetime.strptime(date, '%Y-%m').date())
+        else:
+            number_dates.append(datetime.datetime.strptime(date, '%Y').date())
+
+    return number_dates, number_prices
+
+
+def get_min_max_dates(dates):
+    "Founds the outer limits of min and max years"
+    date_min = min(dates)
+    date_max = max(dates)
+
+    year_min = date_min.year
+    year_max = date_max.year + 1
+
+    return year_min, year_max
+
+
 def exp_func(x, a, b, c):
     return a * np.exp(b * x) + c
 
@@ -60,31 +86,12 @@ def plot(data, maker, model):
     # every which year major tick should be placed
     YEAR_TICK = 3
 
-    dates, prices = zip(*data)
-    num_dates = []
-    # convert dates into numbers which can be plotted
-    for date in dates:
-        # num_dates.append(dt.datestr2num(date))
-        if len(date) > 4:
-            num_dates.append(datetime.datetime.strptime(date, '%Y-%m').date())
-        else:
-            num_dates.append(datetime.datetime.strptime(date, '%Y').date())
+    dates, prices = ready_data(data)
 
-    fitted_dates, fitted_prices = fit_prices(num_dates, prices, exp_func)
-    # fitted_dates_poly, fitted_prices_poly = fit_prices(num_dates, prices, poly_func)
+    fitted_dates, fitted_prices = fit_prices(dates, prices, exp_func)
+    # fitted_dates_poly, fitted_prices_poly = fit_prices(dates, prices, poly_func)
 
-    date_min = min(dates)
-    date_max = max(dates)
-
-    if len(date_min) > 4:
-        year_min = datetime.datetime.strptime(date_min, '%Y-%m').year
-    else:
-        year_min = datetime.datetime.strptime(date_min, '%Y').year
-
-    if len(date_max) > 4:
-        year_max = datetime.datetime.strptime(date_max, '%Y-%m').year + 1
-    else:
-        year_max = datetime.datetime.strptime(date_max, '%Y').year + 1
+    year_min, year_max = get_min_max_dates(dates)
 
     # min and max years should be exactly on major tick for better looks
     year_min = YEAR_TICK * (year_min // YEAR_TICK)
@@ -93,7 +100,7 @@ def plot(data, maker, model):
     plt.gca().xaxis.set_major_formatter(dt.DateFormatter('%Y'))
     plt.gca().xaxis.set_major_locator(dt.YearLocator(YEAR_TICK))
 
-    plt.plot_date(num_dates, prices)
+    plt.plot_date(dates, prices)
     plt.plot_date(fitted_dates, fitted_prices, fmt='-', linewidth=2)
     # plt.plot_date(fitted_dates_poly, fitted_prices_poly, fmt='-', linewidth=2)
     plt.grid(True)
