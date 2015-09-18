@@ -69,14 +69,15 @@ def fit_prices(dates, prices, fit_func):
     popt, pcov = curve_fit(fit_func, norm_number_dates, prices)
 
     # calculate prices, from normalized dates upon exp_func()
-    fitted_dates = np.linspace(min(norm_number_dates),
-                               max(norm_number_dates),
-                               1000)
+    max_norm_date = max(norm_number_dates)
+    fitted_dates = np.linspace(0 - 0.1 * max_norm_date,
+                               1.05 * max_norm_date,
+                               100)
     fitted_prices = [fit_func(date, popt[0], popt[1], popt[2])
                      for date in fitted_dates]
 
     # denormlaize dates
-    denorm_number_dates = (fitted_dates + min_temp_date) * max_date
+    denorm_number_dates = (fitted_dates * max_date) + min_date
 
     return denorm_number_dates, fitted_prices
 
