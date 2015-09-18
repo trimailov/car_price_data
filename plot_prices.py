@@ -58,16 +58,15 @@ def poly_func(x, a, b, c):
 
 def fit_prices(dates, prices, fit_func):
     number_dates = dt.date2num(dates)
-    # normalize dates to have smaller numbers
-    max_date = max(number_dates)
-    temp_number_dates = number_dates / max_date
-    min_temp_date = min(temp_number_dates)
-    norm_number_dates = temp_number_dates - min_temp_date
+
+    # normalize dates to have smaller numbers in range from 0 to 1
+    min_date = min(number_dates)
+    temp_number_dates = number_dates - min_date
+    max_date = max(temp_number_dates)
+    norm_number_dates = temp_number_dates / max_date
     del temp_number_dates
 
-    number_prices = list(map(int, prices))
-
-    popt, pcov = curve_fit(fit_func, norm_number_dates, number_prices)
+    popt, pcov = curve_fit(fit_func, norm_number_dates, prices)
 
     # calculate prices, from normalized dates upon exp_func()
     fitted_dates = np.linspace(min(norm_number_dates),
